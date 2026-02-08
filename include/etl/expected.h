@@ -961,6 +961,36 @@ namespace etl
       : storage(etl::move(ue_.error()))
     {
     }
+
+    //*******************************************
+    /// Copy construct from unexpected<G>
+    //*******************************************
+    template <typename G, typename etl::enable_if<!etl::is_convertible<const G&, TError>::value, bool>::type = false>
+    ETL_CONSTEXPR14 explicit expected(const etl::unexpected<G>& ue)
+      : storage(TError(ue.error()))
+    {
+    }
+
+    template <typename G, typename etl::enable_if<etl::is_convertible<const G&, TError>::value, bool>::type = false>
+    ETL_CONSTEXPR14 expected(const etl::unexpected<G>& ue)
+      : storage(TError(ue.error()))
+    {
+    }
+
+    //*******************************************
+    /// Move construct from unexpected<G>
+    //*******************************************
+    template <typename G, typename etl::enable_if<!etl::is_convertible<const G&, TError>::value, bool>::type = false>
+    ETL_CONSTEXPR14 explicit expected(etl::unexpected<G>&& ue)
+      : storage(TError(etl::move(ue.error())))
+    {
+    }
+
+    template <typename G, typename etl::enable_if<etl::is_convertible<const G&, TError>::value, bool>::type = false>
+    ETL_CONSTEXPR14 expected(etl::unexpected<G>&& ue)
+      : storage(TError(etl::move(ue.error())))
+    {
+    }
 #endif
 
     //*******************************************
